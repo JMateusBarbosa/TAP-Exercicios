@@ -3,6 +3,7 @@ package uea.pagamentos_api.resources;
 import java.net.URI;
 import java.util.List;
 
+import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
+import uea.pagamentos_api.models.Endereco;
 import uea.pagamentos_api.models.Pessoa;
+import uea.pagamentos_api.repositories.PessoaRepository;
 import uea.pagamentos_api.services.PessoaService;
 
 @RestController
@@ -68,5 +71,19 @@ public class PessoaResource {
 		return ResponseEntity.ok().body(pessoaSalva);
 
 	}
+	 @Autowired
+		private PessoaRepository pessoaRepository;
 
+		@PutMapping("/{codigo}/endereco")
+		public ResponseEntity<Pessoa> atualizarEndereco(@PathVariable Long codigo, @RequestBody Endereco novoEndereco) {
+			java.util.Optional<Pessoa> optionalPessoa = pessoaRepository.findById(codigo);
+			if (optionalPessoa.isPresent()) {
+				Pessoa pessoa = optionalPessoa.get();
+				pessoa.setEndereco(novoEndereco);
+				pessoaRepository.save(pessoa);
+				return ResponseEntity.ok(pessoa);
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+		}
 }
