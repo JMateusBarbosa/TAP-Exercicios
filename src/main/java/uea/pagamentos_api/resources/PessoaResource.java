@@ -2,6 +2,7 @@ package uea.pagamentos_api.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
+import uea.pagamentos_api.dto.ResumoPessoaDto;
 import uea.pagamentos_api.models.Endereco;
 import uea.pagamentos_api.models.Pessoa;
 import uea.pagamentos_api.repositories.PessoaRepository;
+import uea.pagamentos_api.repositories.filters.PessoaFilter;
 import uea.pagamentos_api.services.PessoaService;
 
 @RestController
@@ -86,4 +90,17 @@ public class PessoaResource {
 				return ResponseEntity.notFound().build();
 			}
 		}
+		
+		
+
+	    @GetMapping
+	    public ResponseEntity<List<ResumoPessoaDto>> buscarPessoasPorNome(@RequestParam(required = false) String nome) {
+	        PessoaFilter filtro = new PessoaFilter();
+	        filtro.setNome(nome);
+	        List<Pessoa> pessoas = pessoaRepository.findByNomeContainingIgnoreCase(nome);
+	        List<ResumoPessoaDto> dtos = pessoas.stream()
+	                .map(pessoa -> new ResumoPessoaDto(pessoa.getCodigo(), pessoa.getNome(), pessoa.getAtivo()))
+	                .collect(Collectors.toList());
+	        return ResponseEntity.ok(dtos);
+	    }
 }
