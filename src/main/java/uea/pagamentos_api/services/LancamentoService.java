@@ -4,6 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
+=======
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+>>>>>>> 4aec7a5 (atividade 5)
 import org.springframework.stereotype.Service;
 
 import uea.pagamentos_api.dto.ResumoLancamentoDto;
@@ -28,8 +33,14 @@ public class LancamentoService {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
+<<<<<<< HEAD
 	public List<ResumoLancamentoDto> resumir(LancamentoFilter lancamentoFilter){
 		return lancamentoRepository.filtrar(lancamentoFilter);
+=======
+	public Page<ResumoLancamentoDto> resumir(LancamentoFilter lancamentoFilter,
+			Pageable pageable){
+		return lancamentoRepository.filtrar(lancamentoFilter, pageable);
+>>>>>>> 4aec7a5 (atividade 5)
 	}
 	
 	public Lancamento criar(Lancamento lancamento) {

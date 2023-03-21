@@ -93,7 +93,11 @@ public class PessoaResource {
 		
 		
 
+<<<<<<< HEAD
 	    @GetMapping
+=======
+	    @GetMapping (value = "/{nome}")
+>>>>>>> 4aec7a5 (atividade 5)
 	    public ResponseEntity<List<ResumoPessoaDto>> buscarPessoasPorNome(@RequestParam(required = false) String nome) {
 	        PessoaFilter filtro = new PessoaFilter();
 	        filtro.setNome(nome);
